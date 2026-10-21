@@ -58,7 +58,7 @@
     }
   },
   "scripts": {
-    "test": "node --test --experimental-test-isolation=none test/kernel.test.mjs test/integration.test.mjs test/multiplatform.test.mjs test/xianyu.test.mjs test/xianyu-send.test.mjs test/xianyu-tools.test.mjs test/xianyu-store-tools.test.mjs test/xianyu-stores.test.mjs test/auto-deliver.test.mjs test/playbook.test.mjs test/library.test.mjs test/library-routes.test.mjs test/client-constraints.test.mjs test/ai-sandbox.test.mjs test/ai-sandbox-laike.test.mjs"
+    "test": "node --test test/kernel.test.mjs test/integration.test.mjs test/multiplatform.test.mjs test/xianyu.test.mjs test/xianyu-send.test.mjs test/xianyu-tools.test.mjs test/xianyu-store-tools.test.mjs test/xianyu-stores.test.mjs test/auto-deliver.test.mjs test/playbook.test.mjs test/library.test.mjs test/library-routes.test.mjs test/client-constraints.test.mjs test/ai-sandbox.test.mjs test/ai-sandbox-laike.test.mjs"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.0.4"
