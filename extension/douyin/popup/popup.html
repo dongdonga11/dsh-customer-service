@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        width: 280px;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+        padding: 12px;
+        margin: 0;
+      }
+      h3 { margin: 0 0 8px; font-size: 14px; }
+      label { display: block; font-size: 12px; color: #555; margin: 8px 0 2px; }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      .row { display: flex; gap: 8px; }
+      .row > div { flex: 1; }
+      button {
+        margin-top: 12px;
+        width: 100%;
+        padding: 8px;
+        background: #fe2c55;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      button:disabled { background: #bbb; cursor: default; }
+      .status { margin-top: 10px; font-size: 12px; }
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+      .on { background: #2ea043; }
+      .off { background: #999; }
+      .tip { margin-top: 8px; font-size: 11px; color: #888; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <h3>🎵 DSH 抖音客服</h3>
+
+    <div class="row">
+      <div>
+        <label>桥地址 Host</label>
+        <input id="host" placeholder="127.0.0.1" />
+      </div>
+      <div>
+        <label>端口 Port</label>
+        <input id="port" placeholder="8766" />
+      </div>
+    </div>
+
+    <label>配对码（来自 DSH 客服中心面板）</label>
+    <input id="pairCode" placeholder="粘贴配对码" />
+
+    <label>当前登录抖音账号（自动识别）</label>
+    <input id="accountId" placeholder="未识别（请先登录 douyin.com）" readonly />
+
+    <button id="save">保存并连接</button>
+
+    <div class="status">
+      <span id="dot" class="dot off"></span>
+      <span id="statusText">未连接</span>
+    </div>
+
+    <div class="tip">
+      连上后请在抖音页面里打开私信面板并保持在该会话，否则回复无法送出。
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

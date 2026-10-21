@@ -1,0 +1,66 @@
+{
+  "name": "dsh-customer-service",
+  "version": "0.1.0",
+  "description": "DSH 多平台 AI 客服工作台插件：Chrome 扩展接管已登录的电商网页（闲鱼/抖音），本地 WS 桥 + AI 自动回复（带闸门与审计）+ 资料库（知识库）",
+  "license": "MIT",
+  "author": "dongdonga11",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dongdonga11/dsh-customer-service.git"
+  },
+  "homepage": "https://github.com/dongdonga11/dsh-customer-service#readme",
+  "bugs": {
+    "url": "https://github.com/dongdonga11/dsh-customer-service/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "customer-service",
+    "ai-agent",
+    "xianyu",
+    "douyin",
+    "chrome-extension",
+    "knowledge-base"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/kernel",
+    "lib/platforms",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "node --test --experimental-test-isolation=none test/kernel.test.mjs test/integration.test.mjs test/multiplatform.test.mjs test/xianyu.test.mjs test/xianyu-send.test.mjs test/xianyu-tools.test.mjs test/xianyu-store-tools.test.mjs test/xianyu-stores.test.mjs test/auto-deliver.test.mjs test/playbook.test.mjs test/library.test.mjs test/library-routes.test.mjs test/client-constraints.test.mjs test/ai-sandbox.test.mjs test/ai-sandbox-laike.test.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.4"
+  }
+}

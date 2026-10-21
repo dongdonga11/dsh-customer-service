@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "DSH 抖音客服",
+  "version": "0.3.0",
+  "description": "在已登录的页面里接收抖音私信与抖音来客客服消息，接入 DSH 客服中心。所有请求由真人页面发出，抗风控。",
+  "permissions": ["storage", "scripting", "activeTab", "alarms", "tabs", "debugger"],
+  "host_permissions": ["*://*.douyin.com/*", "http://127.0.0.1/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "DSH 抖音客服"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.douyin.com/*"],
+      "exclude_matches": ["*://life.douyin.com/*"],
+      "js": ["injected.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://*.douyin.com/*"],
+      "exclude_matches": ["*://life.douyin.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://life.douyin.com/*"],
+      "js": ["laike_injected.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://life.douyin.com/*"],
+      "js": ["laike.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js", "laike_injected.js"],
+      "matches": ["*://*.douyin.com/*"]
+    }
+  ]
+}

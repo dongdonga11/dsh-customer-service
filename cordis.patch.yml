@@ -1,0 +1,33 @@
+# 客服中心（dsh-cs）—— 一个 Loader 行插入插件；config 由 lib/kernel/config.js 校验
+- insert:
+    - id: cs
+      name: dsh-cs
+      config:
+        # 平台端口：闲鱼 8765 / 抖音 8766（与旧插件可同时运行，互不抢占）
+        # ⚠️ 并行验证阶段：抖音先用 18766（旧插件 dsh-cs-legacy 正占用 8766）。
+        #    正式切换（停用旧插件）后改回 8766，扩展侧无需改端口。
+        ports:
+          xianyu: 8765
+          douyin: 18766
+        # 客服数据目录：默认 $DSH_HOME/dsh-cs；旧 dsh-cs-legacy 数据只读迁移
+        dataDir: ''
+        # 自有 HTTP 路由前缀（面板取数/SSE），必须带鉴权
+        routePrefix: /dsh-cs
+        # AI 自动回复默认关闭（与旧插件一致，面板上显式开启才生效）
+        ai:
+          enabled: false
+          model: ''
+        # 事件通知（默认关闭）：出单/催货/待评价/风控 以 JSON POST 到 webhookUrl
+        # 兼容企业微信/飞书/钉钉机器人或自建 webhook；同事件+同买家 throttleSeconds 内只发一次
+        notify:
+          enabled: false
+          webhookUrl: ''
+          events: [order, urge, rate, risk]
+          throttleSeconds: 60
+        # 话术沉淀（默认关闭）：后台复盘客户档案，把可复用打法写回 knowledge/*.md
+        playbook:
+          enabled: false
+          intervalMinutes: 30
+          minNewTurns: 3
+        # 迁移：只读旧库、写新库；迁移完成后旧库保持原样以便回退
+        migrateFrom: dsh-cs-legacy
