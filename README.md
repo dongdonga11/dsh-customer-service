@@ -1,6 +1,6 @@
 # dsh-customer-service
 
-> 给 [DeepSeek Harness (DSH)](https://github.com/deepseek-ai) 用的**多平台 AI 客服工作台插件**：
+> 给 **DeepSeek Harness (DSH)** 用的**多平台 AI 客服工作台插件**：
 > 用 Chrome 扩展"寄生"在已登录的电商网页上（闲鱼 / 抖音），本地 WebSocket 桥收发消息，
 > AI 自动回复（带闸门与审计），客服数据独立存储，并内置一个**可检索的资料库（知识库）**。
 
@@ -93,7 +93,7 @@ dsh-customer-service/
 ### 0. 前置
 
 - Node.js ≥ 20
-- 已安装并运行 [DeepSeek Harness (DSH)](https://github.com/deepseek-ai)
+- 已安装并运行 **DeepSeek Harness (DSH)**
 - Chrome（用于加载扩展并保持账号登录）
 - 一个可用的 LLM 配置（DSH 里已配好模型）
 
