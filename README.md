@@ -7,7 +7,7 @@
 <p>
   <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   <img alt="platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey">
-  <img alt="node" src="https://img.shields.io/badge/node-%3E%3D20-brightgreen">
+  <img alt="node" src="https://img.shields.io/badge/node-%3E%3D22-brightgreen">
 </p>
 
 ---
@@ -106,7 +106,7 @@ dsh-customer-service/
 
 ### 0. 前置
 
-- Node.js ≥ 20
+- Node.js ≥ 22
 - 已安装并运行 **DeepSeek Harness (DSH)**（开发与截图验证环境：`0.2.1-rc.2`）
 - Chrome（用于加载扩展并保持账号登录）
 - 一个可用的 LLM 配置（DSH 里已配好模型）
