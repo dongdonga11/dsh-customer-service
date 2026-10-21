@@ -31,7 +31,7 @@ const DEFAULT_HOST = "127.0.0.1";
 const DEFAULT_PORT = 8766; // 闲鱼用 8765，两个桥可同时跑
 const DOUYIN_TAB_GLOB = "*://*.douyin.com/*";
 const LAIKE_TAB_GLOB = "*://life.douyin.com/*";
-const KEEPALIVE_URL = "https://www.douyin.com/";
+const KEEPALIVE_URL = "https://www.douyin.com/user/self";
 // 投稿入口：拖拽区 + 隐藏 file input。填完文件后页面自己跳到 post/video。
 const CREATOR_UPLOAD_URL =
   "https://creator.douyin.com/creator-micro/content/upload?enter_from=dou_web";
@@ -1290,6 +1290,26 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
 let keepAliveTabId = null;
 let openingKeepAlive = false;
+// 是否由本扩展自动创建（只有自动创建的页才允许被切换/定时重载，避免打扰用户自己开的抖音页）
+let keepAliveAutoCreated = false;
+
+// MV3 Service Worker 会反复休眠重启，内存状态不可靠 → 把保活标记落到 storage
+try {
+  chrome.storage.local.get(["keepAliveTabId", "keepAliveAutoCreated"], function (s) {
+    if (s && s.keepAliveAutoCreated && s.keepAliveTabId) {
+      keepAliveAutoCreated = true;
+      if (!keepAliveTabId) keepAliveTabId = s.keepAliveTabId;
+    }
+  });
+} catch (_) {}
+
+function saveKeepAliveState() {
+  try {
+    chrome.storage.local.set({ keepAliveTabId: keepAliveTabId, keepAliveAutoCreated: keepAliveAutoCreated });
+  } catch (_) {}
+}
+// 每 6 小时重载一次保活页：抖音 SPA 长时间运行内存会缓慢上涨，重载可把占用拉回基线
+const KEEPALIVE_RELOAD_ALARM = "hermes-douyin-keepalive-reload";
 
 function ensureKeepAliveTab() {
   if (openingKeepAlive) return;
@@ -1299,6 +1319,10 @@ function ensureKeepAliveTab() {
       if (tabs.length > 0) {
         const existing = tabs.find((t) => t.id === keepAliveTabId);
         keepAliveTabId = existing ? existing.id : tabs[0].id;
+        // 自己开的保活页：如果还停在首页（带视频流），切到轻页面，省 CPU/GPU
+        if (keepAliveAutoCreated && existing && existing.url && existing.url.indexOf("/user/self") === -1) {
+          chrome.tabs.update(existing.id, { url: KEEPALIVE_URL, active: false });
+        }
         return;
       }
       openingKeepAlive = true;
@@ -1314,6 +1338,8 @@ function ensureKeepAliveTab() {
             return;
           }
           keepAliveTabId = tab.id;
+          keepAliveAutoCreated = true;
+          saveKeepAliveState();
           console.info("[DSH 客服] 已在后台开保活抖音页", tab.id);
         }
       );
@@ -1323,10 +1349,25 @@ function ensureKeepAliveTab() {
   }
 }
 
+/** 定时重载自动创建的保活页（控制内存；用户正在看的页不动）。 */
+function reloadKeepAliveIfIdle() {
+  if (!keepAliveAutoCreated || !keepAliveTabId) return;
+  try {
+    chrome.tabs.get(keepAliveTabId, function (tab) {
+      if (chrome.runtime.lastError || !tab || tab.active) return;
+      chrome.tabs.reload(keepAliveTabId, { bypassCache: false }, function () {
+        console.info("[DSH 客服] 保活页定时重载（控制内存）");
+      });
+    });
+  } catch (_) {}
+}
+
 try {
   chrome.tabs.onRemoved.addListener(function (tabId) {
     if (tabId === keepAliveTabId) {
       keepAliveTabId = null;
+      keepAliveAutoCreated = false;
+      saveKeepAliveState();
       setTimeout(ensureKeepAliveTab, 4000);
     }
   });
@@ -1345,8 +1386,10 @@ function keepaliveTick() {
 try {
   if (chrome.alarms && typeof chrome.alarms.create === "function") {
     chrome.alarms.create("hermes-douyin-keepalive", { periodInMinutes: 0.4 });
+    chrome.alarms.create(KEEPALIVE_RELOAD_ALARM, { periodInMinutes: 360 });
     chrome.alarms.onAlarm.addListener(function (alarm) {
       if (alarm.name === "hermes-douyin-keepalive") keepaliveTick();
+      if (alarm.name === KEEPALIVE_RELOAD_ALARM) reloadKeepAliveIfIdle();
     });
   } else {
     setInterval(keepaliveTick, 25000);
