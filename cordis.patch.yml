@@ -1,7 +1,7 @@
 # 客服中心（dsh-cs）—— 一个 Loader 行插入插件；config 由 lib/kernel/config.js 校验
 - insert:
     - id: cs
-      name: dsh-cs
+      name: dsh-customer-service
       config:
         # 平台端口：闲鱼 8765 / 抖音 8766（与旧插件可同时运行，互不抢占）
         # ⚠️ 并行验证阶段：抖音先用 18766（旧插件 dsh-cs-legacy 正占用 8766）。

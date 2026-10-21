@@ -12,6 +12,20 @@
 
 ---
 
+## 界面
+
+> 以下截图使用**虚构的演示数据**（示例店铺 / 示例商品），不含任何真实店铺与客户信息。
+
+![客服中心：平台 → 账号卡 → 工作台](docs/screenshots/overview.png)
+
+![会话工作台：AI 回复带 AI 标记，人工可随时接管](docs/screenshots/workbench.png)
+
+![资料库：项目 = 文档库 + 账号绑定](docs/screenshots/library.png)
+
+![流程演示：客服中心 → 工作台 → 资料库](docs/screenshots/demo.gif)
+
+---
+
 ## 这个项目解决什么问题
 
 电商客服的痛点不是"不会回"，而是：
@@ -93,7 +107,7 @@ dsh-customer-service/
 ### 0. 前置
 
 - Node.js ≥ 20
-- 已安装并运行 **DeepSeek Harness (DSH)**
+- 已安装并运行 **DeepSeek Harness (DSH)**（开发与截图验证环境：`0.2.1-rc.2`）
 - Chrome（用于加载扩展并保持账号登录）
 - 一个可用的 LLM 配置（DSH 里已配好模型）
 
